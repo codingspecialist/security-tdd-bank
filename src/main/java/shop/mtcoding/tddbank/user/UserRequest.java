@@ -2,8 +2,17 @@ package shop.mtcoding.tddbank.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
+
+import javax.validation.constraints.Size;
 
 public class UserRequest {
+
+    @Getter @Setter
+    public static class LoginDTO {
+        private String username;
+        private String password;
+    }
 
     @Getter @Setter
     public static class JoinDTO {
