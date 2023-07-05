@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import shop.mtcoding.tddbank.user.User;
 import shop.mtcoding.tddbank.user.UserRepository;
 
+import java.util.Arrays;
+
 @RequiredArgsConstructor
 @Component
 public class DBInit {
@@ -25,7 +27,15 @@ public class DBInit {
                     .status(true)
                     .roles("ROLE_USER")
                     .build();
-            userRepository.save(ssar);
+            User admin = User.builder()
+                    .username("admin")
+                    .password(passwordEncoder.encode("1234"))
+                    .email("admin@nate.com")
+                    .fullName("어드민")
+                    .status(true)
+                    .roles("ROLE_ADMIN")
+                    .build();
+            userRepository.saveAll(Arrays.asList(ssar, admin));
         };
     }
 }
