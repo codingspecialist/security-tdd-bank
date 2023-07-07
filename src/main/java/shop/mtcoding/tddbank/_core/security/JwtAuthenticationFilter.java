@@ -1,6 +1,7 @@
 package shop.mtcoding.tddbank._core.security;
 
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -54,7 +55,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             log.error("토큰 검증 실패");
         } catch (TokenExpiredException tee) {
             log.error("토큰 만료됨");
-        } finally {
+        } catch (JWTDecodeException tee) {
+            log.error("토큰 만료됨");
+        }finally {
             chain.doFilter(request, response);
         }
     }

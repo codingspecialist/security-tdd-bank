@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.tddbank._core.erros.exception.Exception403;
 import shop.mtcoding.tddbank._core.security.CustomUserDetails;
 import shop.mtcoding.tddbank._core.util.ApiUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -15,9 +17,12 @@ import javax.validation.Valid;
 public class AccountController {
     private final AccountService accountService;
 
+
     @PostMapping("/account")
     public ResponseEntity<?> saveAccount(@RequestBody @Valid AccountRequest.SaveDTO saveDTO, Errors errors, @AuthenticationPrincipal CustomUserDetails myUserDetails) {
+        System.out.println("111111111111111111111111111111111111111111111111111111111111111111");
         AccountResponse.SaveDTO responseBody = accountService.계좌등록(saveDTO, myUserDetails.getUser().getId());
+        System.out.println("2222222222222222222222222222222222222222222222222222222222222222222");
         return ResponseEntity.ok().body(ApiUtils.success(responseBody));
     }
 

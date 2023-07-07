@@ -30,6 +30,7 @@ public class AccountResponse {
         private Integer number;
         private Long balance;
         private String createdAt;
+        private AccountDTO accountDTO;
 
         public DetailDTO(Account account) {
             this.id = account.getId();
@@ -37,6 +38,19 @@ public class AccountResponse {
             this.number = account.getNumber();
             this.balance = account.getBalance();
             this.createdAt = DateUtils.toStringFormat(account.getCreatedAt());
+        }
+
+        @Setter @Getter
+        public class AccountDTO {
+            private Long id;
+            private Integer number;
+            private Long balance;
+
+            public AccountDTO(Account account) {
+                this.id = account.getId();
+                this.number = account.getNumber();
+                this.balance = account.getBalance();
+            }
         }
     }
 
@@ -63,4 +77,7 @@ public class AccountResponse {
             }
         }
     }
+
+
 }
+
