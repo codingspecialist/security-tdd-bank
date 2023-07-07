@@ -1,6 +1,7 @@
 package shop.mtcoding.tddbank.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import shop.mtcoding.tddbank._core.security.CustomUserDetails;
 import shop.mtcoding.tddbank._core.security.JwtTokenProvider;
 import shop.mtcoding.tddbank._core.util.ApiUtils;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -30,10 +32,11 @@ public class UserController {
 
         // 2. 회원가입 (서비스요청) - 시큐리티는 패스워드 인코딩이 무조건 되어야 한다.
         joinDTO.setPassword(passwordEncoder.encode(joinDTO.getPassword()));
-        userRepository.save(joinDTO.toEntity());
+        User userPS = userRepository.save(joinDTO.toEntity());
+        UserResponse.JoinDTO responseDTO = new UserResponse.JoinDTO(userPS);
 
         // 3. 응답
-        return ResponseEntity.ok().body("ok");
+        return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
     }
 
     @PostMapping("/login")
