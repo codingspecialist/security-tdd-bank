@@ -2,6 +2,7 @@ package shop.mtcoding.tddbank.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,5 +45,27 @@ public class UserControllerTest {
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.response.username").value("love"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.response.email").value("love@nate.com"));
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.response.fullName").value("러브"));
+    }
+
+    @DisplayName("비밀번호 길이로 실패")
+    @Test
+    public void join_fail1_test() throws Exception {
+        // given
+        UserRequest.JoinDTO joinDTO = new UserRequest.JoinDTO();
+        joinDTO.setUsername("love");
+        joinDTO.setPassword("12");
+        joinDTO.setEmail("love@nate.com");
+        joinDTO.setFullName("러브");
+        ObjectMapper om = new ObjectMapper();
+        String requestBody = om.writeValueAsString(joinDTO);
+        System.out.println("테스트 : "+requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post("/join").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("테스트 : "+responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.success").value(false));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,31 +18,27 @@ import shop.mtcoding.tddbank._core.security.CustomUserDetails;
 import shop.mtcoding.tddbank._core.security.JwtTokenProvider;
 import shop.mtcoding.tddbank._core.util.ApiUtils;
 
+import javax.validation.Valid;
+
+// 요청 값 잘받기, 유효성검사 잘하기, 서비스 호출 잘하기, 응답 잘하기, 인증체크(시큐리티가해줌 X)
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
+
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO joinDTO){ // json
-        // 1. 유효성 검사
-
-        // 2. 회원가입 (서비스요청) - 시큐리티는 패스워드 인코딩이 무조건 되어야 한다.
-        joinDTO.setPassword(passwordEncoder.encode(joinDTO.getPassword()));
-        User userPS = userRepository.save(joinDTO.toEntity());
-        UserResponse.JoinDTO responseDTO = new UserResponse.JoinDTO(userPS);
-
-        // 3. 응답
+    public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinDTO joinDTO, Errors errors){ // json
+        UserResponse.JoinDTO responseDTO = userService.회원가입(joinDTO);
         return ResponseEntity.ok().body(ApiUtils.success(responseDTO));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO loginDTO){
-
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequest.LoginDTO loginDTO, Errors errors){
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                     = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
