@@ -25,7 +25,7 @@ public class DBInit {
                     .email("ssar@nate.com")
                     .fullName("쌀")
                     .status(true)
-                    .roles("ROLE_USER")
+                    .roles("USER")
                     .build();
             userRepository.save(ssar);
 
@@ -35,7 +35,7 @@ public class DBInit {
                     .email("admin@nate.com")
                     .fullName("어드민")
                     .status(true)
-                    .roles("ADMIN_USER")
+                    .roles("ADMIN")
                     .build();
             userRepository.save(admin);
         };

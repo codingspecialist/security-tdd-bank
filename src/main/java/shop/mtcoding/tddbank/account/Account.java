@@ -3,10 +3,15 @@ package shop.mtcoding.tddbank.account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import shop.mtcoding.tddbank._core.erros.exception.Exception400;
+import shop.mtcoding.tddbank._core.erros.exception.Exception401;
+import shop.mtcoding.tddbank._core.erros.exception.Exception403;
 import shop.mtcoding.tddbank.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 
 @NoArgsConstructor
 @Getter
@@ -57,5 +62,31 @@ public class Account {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void checkOwner(Long userId) {
+        if (user.getId().longValue() != userId.longValue()) {
+            throw new Exception403("계좌 소유자가 아닙니다");
+        }
+    }
+
+    public void deposit(Long amount) {
+        balance = balance + amount;
+    }
+
+    public void checkSamePassword(Integer password) {
+        if (!this.password.equals(password)) {
+            throw new Exception401("계좌 비밀번호 검증에 실패했습니다");
+        }
+    }
+
+    public void checkBalance(Long amount) {
+        if (this.balance < amount) {
+            throw new Exception400("amount","계좌 잔액이 부족합니다");
+        }
+    }
+
+    public void withdraw(Long amount) {
+        balance = balance - amount;
     }
 }

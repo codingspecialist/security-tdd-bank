@@ -45,7 +45,7 @@ public class UserRequest {
                     .email(email)
                     .fullName(fullName)
                     .status(true)
-                    .roles("ROLE_USER")
+                    .roles("USER")
                     .build();
         }
     }
