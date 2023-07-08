@@ -22,4 +22,4 @@ spring:
 
 logging:
   level:
-    '[shop.mtcoding.servicebank]': INFO
+    '[shop.mtcoding.tddbank]': INFO
